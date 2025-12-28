@@ -1,257 +1,309 @@
-@font-face {
-    font-family: MainB;
-    src: url('font2.ttf');
-    font-weight: bold;
-}
-
-@font-face {
-    font-family: MainN;
-    src: url('font1.ttf');
-    font-weight: normal;
-}
-
-::-webkit-scrollbar-track {
-    border-radius: 13px;
-    background: transparent;
-    height: 10px;
-}
-::-webkit-scrollbar {
-    width: 3px;
-    background: transparent;
-    height: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    border-radius: 13px;
-    background:  rgba(0, 0, 0, 0);
-    height: 10px;
-}
-
-
-/* ======================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
 
 * {
-    padding: 0px;
-    margin: 0px;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
+    user-select: none;
+    outline: none;
 }
 
-.gameBg {
+body {
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+}
+
+#app {
+    width: 100vw;
     height: 100vh;
-    width: 100vw;
-    background: url('images/desfocado.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    position: absolute;
-}
-
-.black-screen {
-    position: absolute;
-    height: 100vh;
-    width: 100vw;
-    opacity: 100%;
-    background-color: black;
-    opacity: 50%;
-    z-index: 1;
-}
-
-/* ===================================================== */
-
-.all {
-    height: 100vh;
-    width: 100vw;
-    position: absolute;
-    z-index: 2;
-
-}
-
-.all header {
-    width: 100vw;
-    background-color: black;
-    height: 60px;
     display: flex;
     justify-content: center;
+    align-items: center;
+    background: rgba(10, 10, 15, 0.4);
+    /* Efeito suave no fundo do jogo */
 }
 
-.title-container {
-    height: 60px;
-    width: fit-content;
+/* --- TABLET FRAME --- */
+.tablet-frame {
+    width: 950px;
+    height: 650px;
+    background-color: #111111;
+    border-radius: 24px;
+    padding: 12px;
+    box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.8),
+        inset 0 0 0 2px #2d2d2d;
+    position: relative;
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tablet-screen {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, #0f1219 0%, #171e29 100%);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* --- HEADER --- */
+header {
+    height: 80px;
+    background-color: rgba(20, 20, 25, 0.5);
     display: flex;
     align-items: center;
-    position: absolute;
-    left: 10px;
+    justify-content: space-between;
+    padding: 0 35px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
 }
 
-.title-container img {
-    height: 35px;
-}
-
-.title-container p {
-    color: white;
-    font-family: MainB;
-    font-size: 18px;
-    margin-left: 20px;
-}
-
-
-.filter-container {
-    height: 100%;
-    display: flex;
-    font-family: MainN;
-    align-items: flex-end;
-}
-
-
-.filter {
-    color: white;
-    margin: 5px 10px;
-    font-size: 30px;
-    cursor: pointer;
-}
-
-.active-filter {
-    border-bottom: solid 5px #01b7fff5;
-    margin: 0px 10px !important;
-}
-
-/* =================================================================== */
-
-main {
-    height: calc(100vh - 60px);
-    width: 100vw;
-    padding: 40px;
-    display: flex;
-    
-}
-
-.chooseGun-container {
-    height: 100%;
-    width: 550px;
-    /* background-color: red; */
-    overflow-y: scroll;
-}
-
-.chooseGun-container h1 {
-    font-family: MainB;
-    color: white;
-    font-size: 55px;
-    margin-bottom: 10px;
-}
-
-.unit-gun {
-    height: 110px;
-    width: 99%;
-    background-color: rgba(0, 0, 0, 0.384);
-    margin: 8px 0px;
-    border-radius: 2px;
+.logo-area {
     display: flex;
     align-items: center;
-    padding: 20px;
+    gap: 15px;
 }
 
-.img-container {
-    height: 100%;
-    width: 200px;
+.logo-icon {
+    color: #3b82f6;
+    width: 32px;
+    height: 32px;
+}
+
+.logo-text {
     display: flex;
-    align-items: center;
-}
-
-.img-container img {
-    height: 70px;
-    
-}
-
-.unit-gun p {
-    font-family: MainB;
-    color: rgb(255, 255, 255);
-    font-size: 26px;
-    margin-left: 100px ;
-    justify-self: center;
-}
-
-
-.unit-gun button {
-    margin-left: 100px;
-    height: 50px;
-    width: 120px;
-    font-family: MainB;
-    outline: none;
-    border: none;
-    border-radius: 3px;
-    color: rgb(0, 0, 0);
-    background-color: #01b7fff5;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color, height, width, 500ms;
-    cursor: pointer;
-}
-
-.unit-gun button:hover {
-    background-color: #01b7fff5;
-    height: 60px;
-    width: 130px;
-}
-
-/* ===================================================================== */
-
-.gunInf-container {
-    height: 100%;
-    width: 736px;
-    padding: 50px;
-    display: flex;
-    align-items: center;    
     flex-direction: column;
 }
 
-.gunInf-container img {
-    height: 170px;
+.logo-text span {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
 }
 
-.fullImg-container {
-    height: 200px
+.logo-text small {
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
-.gunInf-container h1 {
-    font-family: MainB;
-    color: white;
-    font-size: 55px;
-    margin-bottom: 50px;
+.close-btn {
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 10px;
+    border-radius: 12px;
 }
 
-.spec-info {
+.close-btn:hover {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    transform: scale(1.05);
+}
+
+/* --- LAYOUT --- */
+.content-wrapper {
+    display: flex;
+    height: calc(100% - 80px);
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+    width: 240px;
+    background-color: rgba(0, 0, 0, 0.15);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mt-auto {
+    margin-top: auto;
+}
+
+.nav-label {
+    color: #475569;
+    font-size: 11px;
+    font-weight: 700;
+    padding-left: 15px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    width: 400px;
-    margin: 5px;
+    gap: 12px;
 }
 
-.spec-info p{
-    font-family: MainB;
-    color: white;
-    font-size: 40px;
-    margin-right: 20px;
-    
+.nav-btn svg {
+    width: 18px;
+    height: 18px;
+    transition: 0.3s;
 }
 
-.empyt {
+.nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+    color: #e2e8f0;
+}
+
+.nav-btn.active {
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.15), transparent);
+    color: #60a5fa;
+    border-left: 3px solid #3b82f6;
+    border-radius: 4px 12px 12px 4px;
+}
+
+.nav-btn.active svg {
+    color: #3b82f6;
+    filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.5));
+}
+
+.nav-btn.danger {
+    color: #ef4444;
+}
+.nav-btn.danger:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* --- MAIN CONTENT --- */
+.grid-container {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+/* Custom Scrollbar */
+.grid-container::-webkit-scrollbar {
+    width: 6px;
+}
+.grid-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+.grid-container::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 10px;
+}
+
+.category-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* --- CARDS --- */
+.card {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    position: relative;
     overflow: hidden;
-    background-color: white;
+}
+
+.card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-5px);
+    border-color: rgba(59, 130, 246, 0.3);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card img {
+    width: 140px;
+    height: 90px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 10px 10px rgba(0,0,0,0.4));
+    transition: transform 0.3s;
+}
+
+.card:hover img {
+    transform: scale(1.05);
+}
+
+.card-info {
+    text-align: center;
+    margin-bottom: 15px;
     width: 100%;
-    height: 30px;
-    border-radius: 10000px;
-    overflow: hidden;
 }
 
-.fill {
-    height: 30px;
-    font-family: MainB;
-    color: white;
-    background-color: #01b7ff9c;
-    padding-top: 5px;
-    padding-right: 10px;
-    border-radius: 10000px;
-    text-align: right;
-    transition: all 600ms;
+.card-info h3 {
+    color: #e2e8f0;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
 }
 
+.card-info p {
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 500;
+}
 
+.equip-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(59, 130, 246, 0.05);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+}
+
+.card:hover .equip-btn {
+    background-color: rgba(59, 130, 246, 0.15);
+    border-color: #3b82f6;
+}
+
+/* --- FEEDBACK VISUAL --- */
+.equip-btn.success {
+    background-color: #10b981 !important;
+    color: #ffffff !important;
+    border-color: #10b981 !important;
+    animation: pulse-green 0.5s;
+}
+
+@keyframes pulse-green {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}

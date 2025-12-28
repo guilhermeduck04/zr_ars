@@ -1,5 +1,5 @@
 ----------------------------------------------------------------
----------------------EDIT BY: ZR SRORE
+--------------------- REDESIGN TABLET ARSENAL ------------------
 ----------------------------------------------------------------
 local Tunnel = module("vrp","lib/Tunnel")
 local Proxy = module("vrp","lib/Proxy")
@@ -7,179 +7,137 @@ vRP = Proxy.getInterface("vRP")
 client = {}
 Tunnel.bindInterface("_arsenal",client)
 
-inMenu = true
-local Menu = true
+local inMenu = false
 
 local arsenal = {   ---- CDS DOS ARSENAL 
 	{ 457.01, -996.63, 35.06 },
-	-- { 1836.99,3682.68,38.93 }, 
-	-- { -381.17,-1028.24,-1.99 }, 
-	-- { -1216.19, -2278.02, 14.57 }, 
-	-- { -1191.71, -1729.18, 4.58 },
-	-- { -1469.98, -989.7, 7.72 },
-	-- { 474.39, -1148.66, 29.94 },
-	-- { 283.88, -325.35, 45.28 },
-	-- { -509.68, -112.65, 39.46 },
-	-- { 1034.77, -236.05, 71.49 },
-	-- { 1155.24, 749.9, 154.36 },
-	-- { 1448.34, 3549.68, 40.47 },
-	-- { 2605.07, 5342.35, 47.6 },
-	-- { 1076.52, -191.24, 71.71 },
+    -- Adicione outras coordenadas aqui
 }
-
-
 
 Citizen.CreateThread(function()
 	SetNuiFocus(false,false)
 	while true do
-		sleep = 1000
+		local sleep = 1000
+		local ped = PlayerPedId()
+		local pCoords = GetEntityCoords(ped)
 		
 		for _,lugares in pairs(arsenal) do
-		local x,y,z = table.unpack(lugares)
-		local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)),x,y,z,true)
-        
+            local x,y,z = table.unpack(lugares)
+            local distance = GetDistanceBetweenCoords(pCoords,x,y,z,true)
 
-		if distance <= 3 then
-			sleep = 5
-			DrawMarker(41, x,y,z-0.6,0,0,0,0.0,0,0,0.5,0.5,0.4,88, 179, 252,50,0,0,0,1)
-			if distance <= 1.2 then
-				if IsControlJustPressed(0,38) then
-					TriggerServerEvent('ndk:permissao')				
-				end
-			end
+            if distance <= 3 then
+                sleep = 5
+                DrawMarker(21, x,y,z-0.6,0,0,0,0.0,0,0,0.5,0.5,0.4,88, 179, 252,50,0,0,0,1)
+                if distance <= 1.2 then
+                    if IsControlJustPressed(0,38) then -- Tecla E
+                        TriggerServerEvent('ndk:permissao')				
+                    end
+                end
+            end
 		end
-
-		end
-	Wait(sleep)
+	    Wait(sleep)
 	end
-	inMenu = false
-      SetNuiFocus(false)
-      SendNUIMessage({type = 'close'})
 end)
-
-
-function client.PertoArsenal()
-	local posPed = GetEntityCoords(PlayerPedId())
-	for _, lugares in pairs(arsenal) do
-		local x,y,z = table.unpack(lugares)
-		if GetDistanceBetweenCoords(x,y,z, posPed) < 5 then
-			return true 
-		end
-	end
-end
-
 
 RegisterNetEvent('ndk:permissao')
 AddEventHandler('ndk:permissao',function()
 	inMenu = true
 	SetNuiFocus(true, true)
 	SendNUIMessage({showMenu = true})
+    -- Som de abrir o tablet
+    PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", 1)
 end)
-
 
 RegisterNUICallback('NUIFocusOff', function()
-	print('toguro')
+    inMenu = false
     SetNuiFocus(false,false)
-	TransitionFromBlurred(1000)
-    SetCursorPosition(0.0,false)
-	print('felas')
+    -- Som de fechar
+    PlaySoundFrontend(-1, "Menu_Back", "Phone_SoundSet_Default", 1)
 end)
-----------------------
+
+---------------------- CALLBACKS DE ARMAS ----------------------
+
+-- Função auxiliar para limpar e dar arma
+local function EquiparArma(weaponName, ammo, clipSize, removeWeapon)
+    local ped = PlayerPedId()
+    TriggerServerEvent('ndk:permissao') 
+    
+    if removeWeapon then
+        RemoveWeaponFromPed(ped, GetHashKey(removeWeapon))
+    end
+    
+    local hash = GetHashKey(weaponName)
+    GiveWeaponToPed(ped, hash, ammo, 0, 1)
+    SetPedAmmo(ped, hash, ammo)
+    
+    -- Som de confirmação (Click tático)
+    PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+end
+
 RegisterNUICallback('m4a1', function()
-	local ped = PlayerPedId()
-	TriggerServerEvent('ndk:permissao')
-	SetPedAmmo(ped,GetHashKey("WEAPON_SPECIALCARBINE"),0)
-	RemoveWeaponFromPed(ped,GetHashKey("WEAPON_SPECIALCARBINE"))
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_CARBINERIFLE"),200,0,1)
+    EquiparArma("WEAPON_CARBINERIFLE", 200, 0, "WEAPON_SPECIALCARBINE")
 end)
 
 RegisterNUICallback('m4a4', function()
-	local ped = PlayerPedId()
-	TriggerServerEvent('ndk:permissao')
-	SetPedAmmo(ped,GetHashKey("WEAPON_SPECIALCARBINE"),0)
-	RemoveWeaponFromPed(ped,GetHashKey("WEAPON_CARBINERIFLE"))
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_SPECIALCARBINE"),200,0,1)
+    EquiparArma("WEAPON_SPECIALCARBINE", 200, 0, "WEAPON_CARBINERIFLE")
 end)
--------------------
+
 RegisterNUICallback('mp5', function()
-	local ped = PlayerPedId()
-	TriggerServerEvent('ndk:permissao')
-	SetPedAmmo(ped,GetHashKey("WEAPON_SMG"),0)
-	RemoveWeaponFromPed(ped,GetHashKey("WEAPON_COMBATPDW"))
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_SMG"),200,0,1)
+    EquiparArma("WEAPON_SMG", 200, 0, "WEAPON_COMBATPDW")
 end)
 
 RegisterNUICallback('mpx', function()
-	local ped = PlayerPedId()
-	TriggerServerEvent('ndk:permissao')
-	SetPedAmmo(ped,GetHashKey("WEAPON_COMBATPDW"),0)
-	RemoveWeaponFromPed(ped,GetHashKey("WEAPON_SMG"))
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_COMBATPDW"),200,0,1)
+    EquiparArma("WEAPON_COMBATPDW", 200, 0, "WEAPON_SMG")
 end)
--------------------
+
 RegisterNUICallback('shot45', function()
-	local ped = PlayerPedId()
-	TriggerServerEvent('ndk:permissao')
-	SetPedAmmo(ped,GetHashKey("WEAPON_PUMPSHOTGUN_MK2"),0)
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_PUMPSHOTGUN_MK2"),100,0,1)
+    EquiparArma("WEAPON_PUMPSHOTGUN_MK2", 100, 0, nil)
 end)
----------------------
+
 RegisterNUICallback('fiveseven', function()
-	local ped = PlayerPedId()
-	TriggerServerEvent('ndk:permissao')
-	SetPedAmmo(ped,GetHashKey("WEAPON_PISTOL_MK2"),0)
-	RemoveWeaponFromPed(ped,GetHashKey("WEAPON_COMBATPISTOL"))
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_PISTOL_MK2"),250,0,1)
+    EquiparArma("WEAPON_PISTOL_MK2", 250, 0, "WEAPON_COMBATPISTOL")
 end)
 
 RegisterNUICallback('glock18', function()
-	local ped = PlayerPedId()
-	TriggerServerEvent('ndk:permissao')
-	SetPedAmmo(ped,GetHashKey("WEAPON_COMBATPISTOL"),0)
-	RemoveWeaponFromPed(ped,GetHashKey("WEAPON_PISTOL_MK2"))
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_COMBATPISTOL"),250,0,1)
+    EquiparArma("WEAPON_COMBATPISTOL", 250, 0, "WEAPON_PISTOL_MK2")
 end)
-------------------
+
 RegisterNUICallback('KITBASICO', function()
-	local ped = PlayerPedId()
-	TriggerServerEvent('ndk:permissao')
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_NIGHTSTICK"),0,0,0)
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_KNIFE"),0,0,1)
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_STUNGUN"),0,0,0)
-	TriggerServerEvent('zr_arsenal:colete')
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_FLASHLIGHT"),0,0,0)
+    local ped = PlayerPedId()
+    TriggerServerEvent('ndk:permissao')
+    GiveWeaponToPed(ped,GetHashKey("WEAPON_NIGHTSTICK"),0,0,0)
+    GiveWeaponToPed(ped,GetHashKey("WEAPON_KNIFE"),0,0,1)
+    GiveWeaponToPed(ped,GetHashKey("WEAPON_STUNGUN"),0,0,0)
+    GiveWeaponToPed(ped,GetHashKey("WEAPON_FLASHLIGHT"),0,0,0)
+    TriggerServerEvent('zr_arsenal:colete')
+    
+    PlaySoundFrontend(-1, "TOGGLE_ON", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 end)
----------------
 
 RegisterNUICallback('Taser', function()
-	local ped = PlayerPedId()
-	TriggerServerEvent('ndk:permissao')
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_STUNGUN"),0,0,1)
+    EquiparArma("WEAPON_STUNGUN", 0, 0, nil)
 end)
+
 RegisterNUICallback('Lanterna', function()
-	local ped = PlayerPedId()
-	TriggerServerEvent('ndk:permissao')
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_FLASHLIGHT"),0,0,1)
+    EquiparArma("WEAPON_FLASHLIGHT", 0, 0, nil)
 end)
+
 RegisterNUICallback('KCT', function()
-	local ped = PlayerPedId()
-	TriggerServerEvent('ndk:permissao')
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_NIGHTSTICK"),0,0,1)
+    EquiparArma("WEAPON_NIGHTSTICK", 0, 0, nil)
 end)
+
 RegisterNUICallback('Faca', function()
-	local ped = PlayerPedId()
-	TriggerServerEvent('ndk:permissao')
-	GiveWeaponToPed(ped,GetHashKey("WEAPON_KNIFE"),0,0,1)
+    EquiparArma("WEAPON_KNIFE", 0, 0, nil)
 end)
 
 RegisterNUICallback('colete', function()
-	local ped = PlayerPedId()
-	TriggerServerEvent('ndk:permissao')
-	TriggerServerEvent('zr_arsenal:colete')
+    TriggerServerEvent('ndk:permissao')
+    TriggerServerEvent('zr_arsenal:colete')
+    PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 end)
 
 RegisterNUICallback('Limpar', function()
-	local ped = PlayerPedId()
-	TriggerServerEvent('ndk:permissao')
-	RemoveAllPedWeapons(ped,true)
+    local ped = PlayerPedId()
+    RemoveAllPedWeapons(ped, true)
+    PlaySoundFrontend(-1, "CHECKPOINT_NORMAL", "HUD_MINI_GAME_SOUNDSET", 1)
 end)
